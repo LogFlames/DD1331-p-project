@@ -3,7 +3,7 @@
 #    method to validate new light x and light y
 #    static method to create instance of lighted sphere from user input and makes sure the input is valid
 
-# Render Function: takes parameter [sphere (lighted sphere), resolution, render_window_size], returns a 2d-array (resolution x resolution in size) with floats normalized between 0 and 1 indicating the brightness at that pixel, assuming there in a sphere at the center with a radius of sphere.radius and a light at (sphere.lightx,sphere.lighty). The render_window_size decides how large of an area to render. (from coords (-rws,-rws) to coords (rws,rws)) If the sphere radius and render_window_size are the same, the sphere will just touch the edges of the brightness_map. If the render_window_size is larger than the spheres radius there will be a border
+# Render Function: takes parameter [sphere (lighted sphere), resolution, render_window_size], returns a 2d-array (resolution x resolution in size) with floats normalized between 0 and 1 indicating the brightness at that pixel, if the point is outside the sphere it shall be -1, assuming there in a sphere at the center with a radius of sphere.radius and a light at (sphere.lightx,sphere.lighty). The render_window_size decides how large of an area to render. (from coords (-rws,-rws) to coords (rws,rws)) If the sphere radius and render_window_size are the same, the sphere will just touch the edges of the brightness_map. If the render_window_size is larger than the spheres radius there will be a border
 
 # Terminal visualize function:
 #     Parameters: brightness-map from the render function

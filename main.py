@@ -13,7 +13,7 @@ def render_sphere(sphere: LightedSphere, resulution: int, render_window_size: fl
 
             z_squared = math.pow(sphere.radius, 2) - math.pow(x, 2) - math.pow(y, 2)
             if z_squared < 0:
-                brightness_map[x_index][y_index] = 0
+                brightness_map[x_index][y_index] = -1
             else:
                 z = math.sqrt(z_squared)
                 bright = (x * sphere.x0 + y * sphere.y0 + z * sphere.z0) / math.pow(sphere.radius, 2)
@@ -23,16 +23,16 @@ def render_sphere(sphere: LightedSphere, resulution: int, render_window_size: fl
 
 
 def ascii_gradient(value: float):
-    if value < 0 or value > 1:
-        raise Exception("Cannot convert value outside the 0->1 range to an ascii character")
+    if (value < 0 or value > 1) and value != -1:
+        raise Exception("Cannot convert value other than -1 and outside the 0->1 range to an ascii character")
 
     gradient = [
-        ("M", 0),
-        ("*", 0.3),
-        ("+", 0.5),
-        ("-", 0.7),
-        (".", 0.9),
-        (" ", 1)
+        (" ", -1),
+        (".", 0.3),
+        ("-", 0.55),
+        ("+", 0.7),
+        ("*", 0.85),
+        ("M", 1)
     ]
 
     return next(char for char, bright in gradient if bright >= value)
