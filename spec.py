@@ -14,6 +14,8 @@
 #   Init tkinter, create window
 #   On creation and when sphere-inst-vars are updated: render sphere using the render-function and display it to the screen using the user-supplied color-resolution
 #   Let user enter sphere radius, render resolution and color-resolution
+#       When radius changed, change ligt position as well to scale
+#       When anything changed: render again
 #   On click event:
 #       get new x,y position of light and check if they are on the surface of the sphere - if they are, update the sphere
 
