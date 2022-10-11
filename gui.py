@@ -1,23 +1,26 @@
+import math
+
 import tkinter as tk
-import random
 from tkinter import ttk
 
 from lighted_sphere import LightedSphere
 from renderer import render_sphere
 
+
 WIDTH = 512
-HEIGHT = 660
+HEIGHT = 740
 
 CANVAS_SIZE = 512
 IMAGE_SIZE = 512
 
 RENDER_WINDOW_SIZE = 40
+PADDING = 8
 
 
 class GUI:
     def __init__(self, sphere: LightedSphere):
         self.sphere = sphere
-        self.number_of_colors = 10
+        self.number_of_colors = 8
 
         self.root = tk.Tk()
         self.root.title("Sphere Renderer")
@@ -27,7 +30,35 @@ class GUI:
         self.frm = ttk.Frame(self.root, width = WIDTH, height = HEIGHT)
         self.frm.pack(fill = tk.BOTH, expand = tk.YES)
 
-        ttk.Label(self.frm, text = "Test").pack()
+        self.radius_scale = tk.Scale(
+                self.frm, 
+                label = "Radius",
+                from_ = 1, 
+                to = RENDER_WINDOW_SIZE, 
+                orient = tk.HORIZONTAL, 
+                length = WIDTH // 2, 
+                resolution = -1)
+        self.radius_scale.set(self.sphere.radius)
+        self.radius_scale.pack(pady = PADDING)
+
+        self.number_of_colors_label = ttk.Label(self.frm, text = str(self.number_of_colors))
+        self.number_of_colors_label.pack()
+
+        self.number_of_colors_scale = tk.Scale(
+                self.frm, 
+                label = "Number of Colors",
+                from_ = 1, 
+                to = 8, 
+                orient = tk.HORIZONTAL, 
+                length = WIDTH // 2, 
+                resolution = 1, 
+                showvalue = False, 
+                command = lambda new_noc: self.number_of_colors_label.config(text = str(2 ** int(new_noc))))
+        self.number_of_colors_scale.set(math.log2(self.number_of_colors))
+
+        self.number_of_colors_scale.pack()
+
+        ttk.Button(self.frm, text = "Update", command = self.parameter_changed).pack(pady = PADDING)
 
         canvas = tk.Canvas(self.frm, bg="#000000", width = CANVAS_SIZE, height = CANVAS_SIZE)
         canvas.pack(side = tk.BOTTOM)
@@ -48,9 +79,9 @@ class GUI:
         if self.sphere.try_set_x0_y0(cx, cy):
             self.render()
 
-    def option_changed(self):
-        new_radius = 10
-        new_number_of_colors = 10
+    def parameter_changed(self):
+        new_radius = self.radius_scale.get()
+        new_number_of_colors = 2 ** int(self.number_of_colors_scale.get())
 
         radius_change_factor = new_radius / self.sphere.radius
         self.sphere.radius = new_radius

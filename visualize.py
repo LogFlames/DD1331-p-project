@@ -43,4 +43,4 @@ def file_visualize(brightness_map: list[list[float]]):
 
     with open("rendered_sphere.txt", "w+") as f:
         f.write(lines)
-        print("Sphere renedered to file.")
+        print("Sphere renedered to 'rendered_sphere.txt'.")
