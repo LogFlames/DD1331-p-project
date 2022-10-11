@@ -1,6 +1,7 @@
 import math
 
 from lighted_sphere import LightedSphere
+from gui import GUI
 
 
 def render_sphere(sphere: LightedSphere, resulution: int, render_window_size: float):
