@@ -51,7 +51,7 @@ class LightedSphere:
                 continue
 
         while x0 is None or y0 is None or not LightedSphere.are_valid_x0_y0(radius, x0, y0):
-            x0y0_str = input("Enter x0 and y0 separated by a space: ")
+            x0y0_str = input("Enter x0 and y0 of light separated by a space: ")
 
             try:
                 x0_str,y0_str = x0y0_str.split()
