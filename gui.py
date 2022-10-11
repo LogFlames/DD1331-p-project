@@ -13,12 +13,11 @@ IMAGE_SIZE = 512
 
 RENDER_WINDOW_SIZE = 40
 
-NUMBER_OF_COLORS = 8
-
 
 class GUI:
     def __init__(self, sphere: LightedSphere):
         self.sphere = sphere
+        self.number_of_colors = 10
 
         self.root = tk.Tk()
         self.root.title("Sphere Renderer")
@@ -26,7 +25,6 @@ class GUI:
         self.root.resizable(False, False)
 
         self.frm = ttk.Frame(self.root, width = WIDTH, height = HEIGHT)
-        self.frm.pack_propagate(False)
         self.frm.pack(fill = tk.BOTH, expand = tk.YES)
 
         ttk.Label(self.frm, text = "Test").pack()
@@ -50,8 +48,17 @@ class GUI:
         if self.sphere.try_set_x0_y0(cx, cy):
             self.render()
 
-    def changed_option(self):
-        pass
+    def option_changed(self):
+        new_radius = 10
+        new_number_of_colors = 10
+
+        radius_change_factor = new_radius / self.sphere.radius
+        self.sphere.radius = new_radius
+        self.sphere.try_set_x0_y0(self.sphere.x0 * radius_change_factor, self.sphere.y0 * radius_change_factor)
+
+        self.number_of_colors = new_number_of_colors
+
+        self.render()
 
     def render(self):
         brightness_map = render_sphere(self.sphere, IMAGE_SIZE, RENDER_WINDOW_SIZE)
@@ -62,7 +69,7 @@ class GUI:
                     self.image.put("#000000", (i, j))
                     continue
 
-                banded_value = int(NUMBER_OF_COLORS * value) / NUMBER_OF_COLORS
+                banded_value = int(self.number_of_colors * value) / self.number_of_colors
                 value_hex = "#{:02x}{:02x}{:02x}".format(int(banded_value * 255), int(banded_value * 255), int(banded_value * 255))
 
                 self.image.put(value_hex, (i, j))
