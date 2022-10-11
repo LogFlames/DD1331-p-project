@@ -55,7 +55,6 @@ class GUI:
                 showvalue = False, 
                 command = lambda new_noc: self.number_of_colors_label.config(text = str(2 ** int(new_noc))))
         self.number_of_colors_scale.set(math.log2(self.number_of_colors))
-
         self.number_of_colors_scale.pack()
 
         ttk.Button(self.frm, text = "Update", command = self.parameter_changed).pack(pady = PADDING)
