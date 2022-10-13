@@ -1,10 +1,13 @@
 def ascii_gradient(value: float):
-    if (value < 0 or value > 1) and value != -1:
+    if (value < 0 or value > 1) and value not in [-1, -2, -3, -4]:
         raise Exception("Cannot convert value other than -1 and outside the 0->1 range to an ascii character")
 
     gradient = [
-        (" ", -1),
-        (".", 0.3),
+        (".", -4), # Floor
+        ("S", -3), # Floor Shadow
+        (" ", -2), # Wall
+        ("S", -1), # Wall Shadow
+        (",", 0.3),
         ("-", 0.55),
         ("+", 0.7),
         ("*", 0.85),
@@ -17,13 +20,10 @@ def ascii_gradient(value: float):
 def terminal_visualize(brightness_map: list[list[float]]):
     lines = ""
     for row in brightness_map:
-        lines += "".join(
-                map(
-                    # Make each 'pixel' two character wide and one high for it to be square
-                    # Monospace fonts are twice as high as they are wide
-                    lambda value: ascii_gradient(value) * 2, 
-                    row)
-                )
+        for char in row:
+            # Make each 'pixel' two character wide and one high for it to be square
+            # Monospace fonts are twice as high as they are wide
+            lines += ascii_gradient(char) * 2
         lines += "\n"
 
     print(lines)
@@ -32,13 +32,10 @@ def terminal_visualize(brightness_map: list[list[float]]):
 def file_visualize(brightness_map: list[list[float]]):
     lines = ""
     for row in brightness_map:
-        lines += "".join(
-                map(
-                    # Make each 'pixel' two character wide and one high for it to be square
-                    # Monospace fonts are twice as high as they are wide
-                    lambda value: ascii_gradient(value) * 2, 
-                    row)
-                )
+        for char in row:
+            # Make each 'pixel' two character wide and one high for it to be square
+            # Monospace fonts are twice as high as they are wide
+            lines += ascii_gradient(char) * 2
         lines += "\n"
 
     with open("rendered_sphere.txt", "w+") as f:

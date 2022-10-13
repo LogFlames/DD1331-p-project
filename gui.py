@@ -95,8 +95,17 @@ class GUI:
 
         for i, row in enumerate(brightness_map):
             for j, value in enumerate(row):
-                if value == -1:
-                    self.image.put("#000000", (i, j))
+                if value == -4: # Floor
+                    self.image.put("#990000", (i, j))
+                    continue
+                if value == -3: # Floor Shadow
+                    self.image.put("#440000", (i, j))
+                    continue
+                elif value == -2: # Wall
+                    self.image.put("#009900", (i, j))
+                    continue
+                elif value == -1: # Wall Shadow
+                    self.image.put("#004400", (i, j))
                     continue
 
                 banded_value = int(self.number_of_colors * value) / self.number_of_colors

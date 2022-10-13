@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 import math
 
+from vector import Vector
+
 
 @dataclass
 class LightedSphere:
     radius: float
-    x0: float
-    y0: float
-    z0: float
+    light_pos: Vector
 
     def __init__(self, radius: float, x0: float, y0: float):
         if radius <= 0:
@@ -22,9 +22,7 @@ class LightedSphere:
         if z0_squared < 0:
             return False
 
-        self.x0 = x0
-        self.y0 = y0
-        self.z0 = math.sqrt(z0_squared)
+        self.light_pos = Vector(x0, y0, math.sqrt(z0_squared))
         return True
 
     @staticmethod
