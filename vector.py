@@ -13,6 +13,12 @@ class Vector:
     def __sub__(self, other):
         return Vector(self.x - other.x, self.y - other.y, self.z - other.z)
 
+    def __mul__(self, other):
+        return Vector(self.x * other, self.y * other, self.z * other)
+
+    def __neg__(self):
+        return Vector(-self.x, -self.y, -self.z)
+
     def dot(self, other):
         return self.x * other.x + self.y * other.y + self.z * other.z
 
@@ -25,4 +31,7 @@ class Vector:
 
     def sqr_magnitude(self):
         return self.x * self.x + self.y * self.y + self.z * self.z
+
+    def __str__(self):
+        return f"({self.x}, {self.y}, {self.z})"
 

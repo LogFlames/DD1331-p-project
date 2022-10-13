@@ -13,8 +13,10 @@ Different ranges indicates different things
     -3     : shadow on the floor 
     -4     : the floor
 """
-def render_sphere(sphere: LightedSphere, resulution: int, render_window_size: float, background_distance: float):
+def render_sphere(sphere: LightedSphere, resulution: int, render_window_size: float, background_distance: float, floor_angle: float):
     brightness_map = [[0.0 for _ in range(resulution)] for _ in range(resulution)]
+
+    light_direction = -sphere.light_pos.normalized()
 
     for x_index in range(resulution):
         for y_index in range(resulution):
@@ -23,13 +25,26 @@ def render_sphere(sphere: LightedSphere, resulution: int, render_window_size: fl
 
             z_squared = math.pow(sphere.radius, 2) - math.pow(x, 2) - math.pow(y, 2)
             if z_squared < 0: # Background
-                if y <= 0: # Floor
-                    z = math.sin(math.pi / 4) * -(sphere.radius + background_distance)
-                    pass
-                else: # Wall
-                    z = -(sphere.radius + background_distance)
+                floor_point_y = -math.cos(floor_angle) * (sphere.radius + background_distance)
+                floor_point_z = -math.sin(floor_angle) * (sphere.radius + background_distance)
 
-                brightness_map[x_index][y_index] = -4
+                z = (y + floor_point_z) / math.tan(floor_angle + math.pi / 2) - floor_point_y
+
+                if z < -background_distance - sphere.radius: 
+                    # The point is on the wall
+                    z = -background_distance - sphere.radius
+                    brightness_map[x_index][y_index] = -2
+                else:
+                    # The point is on the floor
+                    brightness_map[x_index][y_index] = -4
+
+                background_point = Vector(x, y, z)
+
+                # Math from: https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
+                delta = (light_direction.dot(background_point)) ** 2 - (background_point.sqr_magnitude() - sphere.radius ** 2)
+
+                if delta >= 0: # There exists one or two intersections between the light line from the background_point with the sphere, so it is covered in shadows
+                    brightness_map[x_index][y_index] += 1
             else: # On sphere
                 z = math.sqrt(z_squared)
                 pos = Vector(x, y, z)

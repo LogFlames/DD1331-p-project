@@ -4,6 +4,9 @@ from visualize import file_visualize, terminal_visualize
 from gui import GUI
 
 
+BACKGROUND_DISTANCE = 5
+
+
 def get_res_and_rws_from_user() -> tuple[int, float]:
     resulution = None
     render_window_size = None
@@ -32,11 +35,11 @@ def main():
     if render_mode == "terminal":
         sphere = LightedSphere.create_from_user_input()
         res,rws = get_res_and_rws_from_user()
-        terminal_visualize(render_sphere(sphere = sphere, resulution = res, render_window_size = rws))
+        terminal_visualize(render_sphere(sphere = sphere, resulution = res, render_window_size = rws, background_distance = BACKGROUND_DISTANCE))
     elif render_mode == "file":
         sphere = LightedSphere.create_from_user_input()
         res,rws = get_res_and_rws_from_user()
-        file_visualize(render_sphere(sphere = sphere, resulution = res, render_window_size = rws))
+        file_visualize(render_sphere(sphere = sphere, resulution = res, render_window_size = rws, background_distance = BACKGROUND_DISTANCE))
     elif render_mode == "gui":
         sphere = LightedSphere(radius = 20, x0 = 0.0, y0 = 0.0)
         g = GUI(sphere)
