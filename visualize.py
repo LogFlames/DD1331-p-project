@@ -18,26 +18,26 @@ def ascii_gradient(value: float):
 
 
 def terminal_visualize(brightness_map: list[list[float]]):
-    lines = ""
+    lines = ["" for _ in range(len(brightness_map))]
     for row in brightness_map:
-        for char in row:
+        for i, char in enumerate(row):
             # Make each 'pixel' two character wide and one high for it to be square
             # Monospace fonts are twice as high as they are wide
-            lines += ascii_gradient(char) * 2
-        lines += "\n"
+            lines[i] += ascii_gradient(char) * 2
 
-    print(lines)
+    print("\n".join(lines))
 
 
 def file_visualize(brightness_map: list[list[float]]):
-    lines = ""
+    lines = ["" for _ in range(len(brightness_map))]
     for row in brightness_map:
-        for char in row:
+        for i, char in enumerate(row):
             # Make each 'pixel' two character wide and one high for it to be square
             # Monospace fonts are twice as high as they are wide
-            lines += ascii_gradient(char) * 2
-        lines += "\n"
+            lines[i] += ascii_gradient(char) * 2
+
+    print("\n".join(lines))
 
     with open("rendered_sphere.txt", "w+") as f:
-        f.write(lines)
+        f.write("\n".join(lines))
         print("Sphere renedered to 'rendered_sphere.txt'.")
