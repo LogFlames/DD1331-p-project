@@ -3,15 +3,17 @@ import math
 from lighted_sphere import LightedSphere
 from vector import Vector
 
+class PixelEnum:
+    SPHERE = 0
+    WALL = -2
+    WALL_SHADOW = -1
+    FLOOR = -4
+    FLOOR_SHADOW = -3
+
 
 """
 return: brightness_map - a 2d array of brightness values
 Different ranges indicates different things
-    0 -> 1 : the brightness of the sphere
-    -1     : shadow on the wall
-    -2     : the wall
-    -3     : shadow on the floor 
-    -4     : the floor
 """
 def render_sphere(sphere: LightedSphere, resulution: int, render_window_size: float, background_distance: float, floor_angle: float):
     brightness_map = [[0.0 for _ in range(resulution)] for _ in range(resulution)]
@@ -33,10 +35,10 @@ def render_sphere(sphere: LightedSphere, resulution: int, render_window_size: fl
                 if z < -background_distance - sphere.radius: 
                     # The point is on the wall
                     z = -background_distance - sphere.radius
-                    brightness_map[x_index][y_index] = -2
+                    brightness_map[x_index][y_index] = PixelEnum.WALL
                 else:
                     # The point is on the floor
-                    brightness_map[x_index][y_index] = -4
+                    brightness_map[x_index][y_index] = PixelEnum.FLOOR
 
                 background_point = Vector(x, y, z)
 
@@ -44,7 +46,10 @@ def render_sphere(sphere: LightedSphere, resulution: int, render_window_size: fl
                 delta = (light_direction.dot(background_point)) ** 2 - (background_point.sqr_magnitude() - sphere.radius ** 2)
 
                 if delta >= 0: # There exists one or two intersections between the light line from the background_point with the sphere, so it is covered in shadows
-                    brightness_map[x_index][y_index] += 1
+                    if brightness_map[x_index][y_index] == PixelEnum.WALL:
+                        brightness_map[x_index][y_index] = PixelEnum.WALL_SHADOW
+                    if brightness_map[x_index][y_index] == PixelEnum.FLOOR:
+                        brightness_map[x_index][y_index] = PixelEnum.FLOOR_SHADOW
             else: # On sphere
                 z = math.sqrt(z_squared)
                 pos = Vector(x, y, z)

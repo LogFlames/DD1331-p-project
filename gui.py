@@ -1,17 +1,20 @@
 import math
+import itertools
+
+import time
 
 import tkinter as tk
 from tkinter import ttk
 
 from lighted_sphere import LightedSphere
-from renderer import render_sphere
+from renderer import render_sphere, PixelEnum
 
 
 WIDTH = 512
-HEIGHT = 800
+HEIGHT = 1024
 
 CANVAS_SIZE = 512
-IMAGE_SIZE = 512
+IMAGE_SIZE = CANVAS_SIZE
 
 RENDER_WINDOW_SIZE = 40
 
@@ -82,13 +85,13 @@ class GUI:
 
         ttk.Button(self.frm, text = "Update", command = self.parameter_changed).pack()
 
-        canvas = tk.Canvas(self.frm, bg="#000000", width = CANVAS_SIZE, height = CANVAS_SIZE)
-        canvas.pack(side = tk.BOTTOM)
+        self.canvas = tk.Canvas(self.frm, bg="#000000", width = CANVAS_SIZE, height = CANVAS_SIZE)
+        self.canvas.pack(side = tk.BOTTOM)
 
         self.image = tk.PhotoImage(width = IMAGE_SIZE, height = IMAGE_SIZE)
-        canvas.create_image((CANVAS_SIZE // 2, CANVAS_SIZE // 2), image = self.image, state = "normal")
+        self.canvas.create_image((CANVAS_SIZE // 2, CANVAS_SIZE // 2), image = self.image, state = "normal")
 
-        canvas.bind("<Button-1>", self.handle_click)
+        self.canvas.bind("<Button-1>", self.handle_click)
 
     def start(self):
         self.render()
@@ -121,23 +124,18 @@ class GUI:
         brightness_map = render_sphere(self.sphere, IMAGE_SIZE, RENDER_WINDOW_SIZE, self.background_distance, (self.background_angle + 90) / 90 * math.pi / 2)
 
         for i, row in enumerate(brightness_map):
-            for j, value in enumerate(row):
-                if value == -4: # Floor
+            for j, pixel in enumerate(row):
+                if pixel == PixelEnum.FLOOR:
                     self.image.put("#990000", (i, j))
-                    continue
-                if value == -3: # Floor Shadow
+                elif pixel == PixelEnum.FLOOR_SHADOW:
                     self.image.put("#440000", (i, j))
-                    continue
-                elif value == -2: # Wall
+                elif pixel == PixelEnum.WALL:
                     self.image.put("#009900", (i, j))
-                    continue
-                elif value == -1: # Wall Shadow
+                elif pixel == PixelEnum.WALL_SHADOW:
                     self.image.put("#004400", (i, j))
-                    continue
-
-                banded_value = int(self.number_of_colors * value) / self.number_of_colors
-                value_hex = "#{:02x}{:02x}{:02x}".format(int(banded_value * 255), int(banded_value * 255), int(banded_value * 255))
-
-                self.image.put(value_hex, (i, j))
+                else:
+                    banded_value = int(self.number_of_colors * pixel) / self.number_of_colors
+                    value_hex = "#{:02x}{:02x}{:02x}".format(int(banded_value * 255), int(banded_value * 255), int(banded_value * 255))
+                    self.image.put(value_hex, (i, j))
 
 
