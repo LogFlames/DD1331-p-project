@@ -6,7 +6,7 @@ from gui import GUI
 
 BACKGROUND_DISTANCE = 5
 FLOOR_ANGLE = 3 
-RENDER_WINDOW_SIZE = 40
+RENDER_WINDOW_SIZE = 50
 
 
 def get_res_from_user() -> int:
@@ -21,8 +21,19 @@ def get_res_from_user() -> int:
 
     return resulution
 
+def info():
+    print("This program will render a sphere, lit up by a directional light, against a background.")
+    print("It will be rendered either to the terminal, written into a file or shown in a GUI.")
+    print("You will decide the radius of the sphere and which point on the sphere the light will hit first.")
+    print("The gui provides some extra options of distance between the background and sphere, aswell as the angle of the floor. In the GUI you can also decide on the color-resulution, how many colors it will use to render.")
+    print("When rendering to the terminal or a file you can choose the resulution. The render will be twice as many characters wide as it is tall, as each character is twice as high as it is wide.")
+    print("See this for a visualization of the scene from the side: https://www.desmos.com/calculator/b5n82epbuy")
+    print("")
+
 
 def main():
+    info()
+
     while (render_mode := input("Render using 'terminal', 'file' or 'GUI'? ").lower().strip()) not in ["terminal", "file", "gui"]:
         print(f"Invalid option '{render_mode}', please enter one of the options above.")
 
